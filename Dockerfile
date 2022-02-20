@@ -9,7 +9,6 @@ RUN cargo build --locked --release
 # This is the 2nd stage: a very small image where we copy the appchain binary."
 FROM docker.io/library/ubuntu:20.04
 
-
 COPY --from=builder /appchain/target/release/appchain-discovol /usr/local/bin
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -29,6 +28,5 @@ USER appchain
 
 EXPOSE 30333 9933 9944 9615
 VOLUME ["/data"]
-
 
 ENTRYPOINT ["/usr/local/bin/appchain-discovol"]

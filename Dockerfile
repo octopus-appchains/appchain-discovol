@@ -9,7 +9,8 @@ RUN cargo build --locked --release
 # This is the 2nd stage: a very small image where we copy the appchain binary."
 FROM docker.io/library/ubuntu:20.04
 
-COPY --from=builder /appchain/target/release/discovol-appchain /usr/local/bin
+
+COPY --from=builder /appchain/target/release/appchain-discovol /usr/local/bin
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -22,11 +23,12 @@ RUN useradd -m -u 1000 -U -s /bin/sh -d /appchain appchain && \
 # unclutter and minimize the attack surface
 	rm -rf /usr/bin /usr/sbin && \
 # check if executable works in this container
-	/usr/local/bin/discovol-appchain --version
+	/usr/local/bin/appchain-discovol --version
 
 USER appchain
 
 EXPOSE 30333 9933 9944 9615
 VOLUME ["/data"]
 
-ENTRYPOINT ["/usr/local/bin/discovol-appchain"]
+
+ENTRYPOINT ["/usr/local/bin/appchain-discovol"]

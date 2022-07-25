@@ -5,7 +5,9 @@ pub use pallet::*;
 #[frame_support::pallet]
 pub mod pallet {
 
-	use frame_support::sp_runtime::traits::Zero;
+	use frame_support::sp_runtime::traits::TrailingZeroInput;
+
+	// use frame_support::sp_runtime::traits::Zero;
 
 	use frame_support::sp_runtime::SaturatedConversion;
 
@@ -16,6 +18,8 @@ pub mod pallet {
 	use frame_support::traits::{Currency, ExistenceRequirement, ReservableCurrency};
 
 	use frame_support::pallet_prelude::*;
+
+	use sp_io::hashing::blake2_256;
 
 	type BalanceOf<T> = <<T as Config>::SpreadCurrency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
@@ -39,8 +43,6 @@ pub mod pallet {
 		Initialized(T::AccountId),
 
 		SpreadUrlCreated(T::AccountId, Vec<u8>, Vec<u8>, BalanceOf<T>, u8),
-
-		BatchCompleted(T::AccountId, Vec<T::AccountId>, u128),
 		//
 	}
 
@@ -62,11 +64,16 @@ pub mod pallet {
 		PayRelationFail,
 
 		InvalidHash,
+
+		InvalidUrl,
+
+		InvalidRelation,
 		//
 	}
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
+	#[pallet::without_storage_info]
 	pub struct Pallet<T>(_);
 
 	#[pallet::storage]
@@ -75,7 +82,7 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn get_fund)]
-	pub(super) type Fund<T: Config> = StorageValue<_, T::AccountId, ValueQuery>;
+	pub(super) type Fund<T: Config> = StorageValue<_, T::AccountId>;
 
 	#[pallet::storage]
 	pub type SpreadUrls<T: Config> = StorageDoubleMap<_, Blake2_128Concat, Vec<u8>, Blake2_128Concat, T::AccountId, (T::BlockNumber, Vec<u8>, BalanceOf<T>, T::AccountId, u8), OptionQuery>;
@@ -106,24 +113,34 @@ pub mod pallet {
 			//
 		}
 
-		//#[pallet::weight(10_000 + T::DbWeight::get().reads_writes(4,4))]
-		#[pallet::weight(1_000)]
+		#[pallet::weight(10_000 + T::DbWeight::get().reads_writes(4,4))]
 		pub fn create_spread(origin: OriginFor<T>, hash: Vec<u8>, url: Vec<u8>, relation: T::AccountId, score: u8) -> DispatchResultWithPostInfo {
 			//
 
 			let sender = ensure_signed(origin)?;
 
-			ensure!(hash.len() == 32, <Error<T>>::InvalidHash);
+			ensure!(url.len() > 9 && url.len() < 501, <Error<T>>::InvalidUrl);
+
+			let url_hash: Vec<u8> = blake2_256(&url).into();
+
+			ensure!(hash == url_hash, <Error<T>>::InvalidHash);
 
 			ensure!(Self::is_init(), <Error<T>>::NotFund);
 
-			let fund = Self::get_fund();
+			// let fund = Self::get_fund();
+			let fund = Self::get_fund().expect("get_fund");
 
 			ensure!(!SpreadUrls::<T>::contains_key(&hash, &sender), <Error<T>>::UrlSpreaded);
 
-			let (register, url_block, _, _, _) = pallet_register::Pallet::<T>::get_url(&hash);
+			ensure!(
+				pallet_register::RegisterUrls::<T>::contains_key(&hash),
+				<Error<T>>::UrlNotRegistered
+			);
 
-			ensure!(!url_block.is_zero(), <Error<T>>::UrlNotRegistered);
+			let (register, _url_block, _, _, _) =
+				pallet_register::Pallet::<T>::get_url(&hash).unwrap();
+
+			// ensure!(!_url_block.is_zero(), <Error<T>>::UrlNotRegistered);
 
 			let current_block = <frame_system::Pallet<T>>::block_number();
 
@@ -140,16 +157,49 @@ pub mod pallet {
 			let x6: BalanceOf<T> = (amount / 10 * 6).saturated_into();
 
 			if register != sender {
+				//
+
 				ensure!(T::SpreadCurrency::transfer(&sender, &register, x4.clone(), ExistenceRequirement::KeepAlive).is_ok(), <Error<T>>::PayRegisterFail);
+
+				//
 			}
 
 			if SpreadUrls::<T>::contains_key(&hash, &relation) {
+				//
+
 				ensure!(T::SpreadCurrency::transfer(&sender, &fund, x2, ExistenceRequirement::KeepAlive).is_ok(), <Error<T>>::PayFundFail);
 
 				ensure!(T::SpreadCurrency::transfer(&sender, &relation, x4, ExistenceRequirement::KeepAlive).is_ok(), <Error<T>>::PayRelationFail);
-			} else {
-				ensure!(T::SpreadCurrency::transfer(&sender, &fund, x6, ExistenceRequirement::KeepAlive).is_ok(), <Error<T>>::PayFundFail);
-			}
+
+			//
+		} else {
+			//
+
+			// let zero_bytes: Vec<u8> = "".into();
+
+			// let zero_address = T::AccountId::decode(&mut &zero_bytes[..]).unwrap();
+		
+			let zero_address = T::AccountId::decode(&mut TrailingZeroInput::new(&[][..])).expect("zero_address");
+
+			// let zero_address = 	AccountId::from_h256(H256::from_low_u64_be(0));	
+
+			ensure!(relation == zero_address, <Error<T>>::InvalidRelation);
+
+			// log::info!("\n\nrelation: {:?}\n\n", relation);
+
+			ensure!(
+				T::SpreadCurrency::transfer(
+					&sender,
+					&fund,
+					x6,
+					ExistenceRequirement::KeepAlive
+				)
+				.is_ok(),
+				<Error<T>>::PayFundFail
+			);
+
+			//
+		}
 
 			SpreadUrls::<T>::insert(&hash, &sender, (&current_block, &url, x.clone(), &relation, &score));
 

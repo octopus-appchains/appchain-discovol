@@ -14,6 +14,8 @@ pub mod pallet {
 
 	use frame_support::pallet_prelude::*;
 
+	use sp_io::hashing::blake2_256;
+
 	type BalanceOf<T> = <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
 	#[pallet::config]
@@ -48,11 +50,14 @@ pub mod pallet {
 		RegisterPayFail,
 
 		InvalidHash,
+
+		InvalidUrl,
 		//
 	}
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
+	#[pallet::without_storage_info]
 	pub struct Pallet<T>(_);
 
 	#[pallet::storage]
@@ -61,11 +66,11 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn get_fund)]
-	pub(super) type Fund<T: Config> = StorageValue<_, T::AccountId, ValueQuery>;
+	pub(super) type Fund<T: Config> = StorageValue<_, T::AccountId>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn get_url)]
-	pub type RegisterUrls<T: Config> = StorageMap<_, Blake2_128Concat, Vec<u8>, (T::AccountId, T::BlockNumber, Vec<u8>, BalanceOf<T>, T::AccountId), ValueQuery>;
+	pub type RegisterUrls<T: Config> = StorageMap<_, Blake2_128Concat, Vec<u8>, (T::AccountId, T::BlockNumber, Vec<u8>, BalanceOf<T>, T::AccountId)>;
 
 	#[pallet::hooks]
 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
@@ -93,18 +98,22 @@ pub mod pallet {
 			//
 		}
 
-		//#[pallet::weight(10_000 + T::DbWeight::get().reads_writes(3,2))]
-		#[pallet::weight(1_000)]
+		#[pallet::weight(10_000 + T::DbWeight::get().reads_writes(3,2))]
 		pub fn create_register(origin: OriginFor<T>, hash: Vec<u8>, url: Vec<u8>) -> DispatchResultWithPostInfo {
 			//
 
 			let sender = ensure_signed(origin)?;
 
-			ensure!(hash.len() == 32, <Error<T>>::InvalidHash);
+			ensure!(url.len() > 9 && url.len() < 501, <Error<T>>::InvalidUrl);
+
+			let url_hash: Vec<u8> = blake2_256(&url).into();
+
+			ensure!(hash == url_hash, <Error<T>>::InvalidHash);
 
 			ensure!(Self::is_init(), <Error<T>>::NotFund);
 
-			let fund = Self::get_fund();
+			//let fund = Self::get_fund();
+			let fund = Self::get_fund().expect("Fund must initialized");
 
 			ensure!(!RegisterUrls::<T>::contains_key(&hash), <Error::<T>>::UrlRegistered);
 

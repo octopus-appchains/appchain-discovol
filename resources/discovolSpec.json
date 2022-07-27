@@ -1,11 +1,15 @@
 {
-  "name": "Local Testnet",
-  "id": "local_testnet",
-  "chainType": "Local",
+  "name": "Discovol",
+  "id": "discovol",
+  "chainType": "Live",
   "bootNodes": [],
   "telemetryEndpoints": null,
-  "protocolId": null,
-  "properties": null,
+  "protocolId": "disc",
+  "properties": {
+    "ss58Format": 42,
+    "tokenDecimals": 14,
+    "tokenSymbol": "DISC"
+  },  
   "forkBlocks": null,
   "badBlocks": null,
   "lightSyncState": null,
@@ -28,45 +32,65 @@
       "balances": {
         "balances": [
           [
-            "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-            1000000000000000000000
+            "5GNCs3EQYyQLxZ42KxAimgqzXP8BM3Kb8Mhj7t2vCqwFDDT9",
+            51000000000000000
           ],
           [
-            "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
-            1000000000000000000000
+            "5EefJTVB6vAPj3cKQdwyppPJvCgLzptgdF82rGNKGNNoK9oD",
+            1000000000000000
           ],
           [
-            "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
-            1000000000000000000000
+            "5CGDJ4oXuiQERkHJ9phomyoJa9qa6iovxvzUnWMk9cvb3Pd9",
+            1000000000000000
           ],
           [
-            "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
-            1000000000000000000000
+            "5DjvCxQwknVnUqYrXionXjbG4DxhnEaJq6smffknRJ6RQWps",
+            1000000000000000
           ],
           [
-            "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw",
-            1000000000000000000000
+            "5Dqn6V5qfkdSsPmo2TscfHsKcDGwnUPVj4T9UpmVm3AZCokR",
+            100000000000000000000
           ],
           [
-            "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL",
-            1000000000000000000000
+            "5GZCvu6RTCNQjGeARP4D2fvGQt3V1kBcUBCGntQBBbpPmxsU",
+            10000000000000000000000
+          ],
+          [
+            "5Eq1xxjbHYphTEtLCQuyUt9Y7VyENiExH16RRSWc6DGkfmzm",
+            1000000000000000000
+          ],
+          [
+            "5GpkDE5F3y9eAJHzqQygZ3BQa6Cwx9YM7fJ2srg1bwhAnrKM",
+            1000000000000000000
+          ],
+          [
+            "5FjSVs1bisBKNDqE8YGhXJwZ5wPHX83i1KX9P162bNF7fzZk",
+            1000000000000000000
           ]
         ]
       },
       "transactionPayment": null,
       "octopusAppchain": {
-        "anchorContract": "octopus-anchor.testnet",
+        "anchorContract": "discovol.registry.test_oct.testnet",
         "validators": [
           [
-            "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-            100000000000000000000
+            "5GNCs3EQYyQLxZ42KxAimgqzXP8BM3Kb8Mhj7t2vCqwFDDT9",
+            10000000000000000000000
           ],
           [
-            "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
-            100000000000000000000
+            "5EefJTVB6vAPj3cKQdwyppPJvCgLzptgdF82rGNKGNNoK9oD",
+            10000000000000000000000
+          ],
+          [
+            "5CGDJ4oXuiQERkHJ9phomyoJa9qa6iovxvzUnWMk9cvb3Pd9",
+            10000000000000000000000
+          ],
+          [
+            "5DjvCxQwknVnUqYrXionXjbG4DxhnEaJq6smffknRJ6RQWps",
+            10000000000000000000000
           ]
         ],
-        "preminedAmount": 102400000000000000,
+        "preminedAmount": 90000000000000000000000,
         "assetIdByTokenId": [
           [
             "usdn.testnet",
@@ -76,7 +100,7 @@
       },
       "octopusLpos": {
         "historyDepth": 84,
-        "eraPayout": 200000000000000
+        "eraPayout": 5479500000000000000
       },
       "octopusAssets": {
         "assets": [],
@@ -86,25 +110,47 @@
       "session": {
         "keys": [
           [
-            "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-            "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+            "5GNCs3EQYyQLxZ42KxAimgqzXP8BM3Kb8Mhj7t2vCqwFDDT9",
+            "5GNCs3EQYyQLxZ42KxAimgqzXP8BM3Kb8Mhj7t2vCqwFDDT9",
             {
-              "babe": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-              "grandpa": "5FA9nQDVg267DEd8m1ZypXLBnvN7SFxYwV7ndqSYGiN9TTpu",
-              "im_online": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-              "beefy": "KW39r9CJjAVzmkf9zQ4YDb2hqfAVGdRqn53eRqyruqpxAP5YL",
-              "octopus": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+              "babe": "5FntV8n3fbM7j2bjKPeiHCuD5B1Eqm2gtWrcZyJWjGdmJ3Jb",
+              "grandpa": "5CFZAWhvJ5dZWhqW5uzNsGxw19cNv85SQuMNFL6x3UJ6TeTi",
+              "im_online": "5E9hpYqbSAKNQ38Jb8mHyHdXybBzGM2VBqRhhwLyyp13p7MH",
+              "beefy": "KW5SZW6dLwAKGsmiD19so5gr5JBAoccwtKXX2WZX6XEHTrsfu",
+              "octopus": "5GKGF3bjBhajbLZX8GFus6yCphkC7AGLGAuKqg11tmduGcbb"
             }
           ],
           [
-            "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
-            "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
+            "5EefJTVB6vAPj3cKQdwyppPJvCgLzptgdF82rGNKGNNoK9oD",
+            "5EefJTVB6vAPj3cKQdwyppPJvCgLzptgdF82rGNKGNNoK9oD",
             {
-              "babe": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
-              "grandpa": "5GoNkf6WdbxCFnPdAnYYQyCjAKPJgLNxXwPjwTh6DGg6gN3E",
-              "im_online": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
-              "beefy": "KWByAN7WfZABWS5AoWqxriRmF5f2jnDqy3rB5pfHLGkY93ibN",
-              "octopus": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty"
+              "babe": "5EC1STnDAnRjrwoZBVckyjp2rAkYUUfM8Hk5YVrRXasFGRfh",
+              "grandpa": "5F1tm9HEW4Dwvz9tpqMtUCEkARCqbZ4KcUTvob3uVtAcGoS9",
+              "im_online": "5FnttkHv9XzCbd1CijaLWLuvo3mmCezi6QW3Fi29suLnTgaa",
+              "beefy": "KWDsypmbdK5ThfyPDoPmY2VyY39nZb7DG1TwD8WYaheZaAagx",
+              "octopus": "5HYgjFjazFmf8MqsKufDvc3UpLGu1gQkbcpMShbsqeygZ3zj"
+            }
+          ],
+          [
+            "5CGDJ4oXuiQERkHJ9phomyoJa9qa6iovxvzUnWMk9cvb3Pd9",
+            "5CGDJ4oXuiQERkHJ9phomyoJa9qa6iovxvzUnWMk9cvb3Pd9",
+            {
+              "babe": "5CWwkGEsNYFCW9fwnxKmNATqwg62yHqJEaUN1kZQJH4gqiEG",
+              "grandpa": "5Fcj2VaosUfeurLrEGqeJkQVsnCgdC9H9d3Fs5cnJhyMJZMM",
+              "im_online": "5Fbqvx6e24JYWnCHjMqYAgn8YiiBBQbDEwDh9z299Nqoj5Rw",
+              "beefy": "KWABNE8TQmWKP3rXQfaYrhXPe5XFq4bhyAEkZc1DthSVxAgnH",
+              "octopus": "5DP2ZW5pAt2zijF3vvv6UugYq7SnmVJxdiN49HzWpTmBLbk4"
+            }
+          ],
+          [
+            "5DjvCxQwknVnUqYrXionXjbG4DxhnEaJq6smffknRJ6RQWps",
+            "5DjvCxQwknVnUqYrXionXjbG4DxhnEaJq6smffknRJ6RQWps",
+            {
+              "babe": "5HNbABvNqUkaDSmSe4FwC7FZbgkERdkMaHqZvmvNiXR5Prep",
+              "grandpa": "5EgioNiVjS2k96f6oo4cbZdc5tKYT1MGdAR51rpAWVcpnVTH",
+              "im_online": "5CXn6ZqAAmabipoXxWesGjkxVrQ3QD1FeNZ7LoEnK86MnFjM",
+              "beefy": "KWDif854jFCdsQw4z4axrux9p4Q4z7LDDFSm2arAeRnzng9Wz",
+              "octopus": "5FnUVKVwzhvNgPHtoEeXm7UYg2V7bQEZWdmkxG1MuJ5kZssx"
             }
           ]
         ]
@@ -119,7 +165,7 @@
         "authorities": []
       },
       "sudo": {
-        "key": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+        "key": "5GNCs3EQYyQLxZ42KxAimgqzXP8BM3Kb8Mhj7t2vCqwFDDT9"
       },
       "vesting": {
         "vesting": []
